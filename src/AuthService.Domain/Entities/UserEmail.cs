@@ -5,20 +5,20 @@ public class UserEmail
 {
     [Key]
     [MaxLength(16)]
-    public string Id {get; set;}
+    public string Id { get; set; } = string.Empty;
 
-    [Required]
+    [Required(ErrorMessage = "El ID de usuario es obligatorio.")]
     [MaxLength(16)]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
 
     [Required]
-    public bool EmailVerfied { get; set; }
+    public bool EmailVerified { get; set; }
 
     [MaxLength(256)]
     public string? EmailVerificationToken { get; set; } = string.Empty;
 
-    public DateTime? EmailVerificationTokenExpiration { get; set;}
+    public DateTime? EmailVerificationTokenExpiration { get; set; }
 
-    public User User {get; set; } = null!;
-
+    // Propiedad de navegación hacia la entidad User
+    public virtual User User { get; set; } = default!;
 }
