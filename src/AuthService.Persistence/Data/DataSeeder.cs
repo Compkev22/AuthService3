@@ -65,7 +65,7 @@ public static async Task SeedAsync(ApplicationDbContext context)
                         UserId = userId,
                         EmailVerified = true,
                         EmailVerificationToken = null,
-                        EmailVerificationTokenExpiry = null
+                        EmailVerificationTokenExpiration = null
                     },
                     UserRoles =
                     [
