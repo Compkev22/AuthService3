@@ -52,4 +52,28 @@ public class RoleRepository(ApplicationDbContext context) : IRoleRepository
             
         return roles.AsReadOnly();
     }
+
+    // Agrega estos dos métodos dentro de tu clase RoleRepository
+
+    public async Task<int> CountUsersInRoleAsync(string roleName)
+    {
+    // Cuenta cuántos registros hay en la tabla intermedia basándose en el nombre del rol
+    return await context.UserRoles
+        .Include(ur => ur.Role)
+        .CountAsync(ur => ur.Role.Name == roleName);
+    }
+
+    public async Task<List<User>> GetUsersByRoleAsync(string roleName)
+{
+    // Buscamos en la tabla intermedia, incluimos la información del usuario
+    // y su perfil/email porque tu DTO los va a necesitar para mapear.
+    return await context.UserRoles
+        .Include(ur => ur.User)
+            .ThenInclude(u => u.UserProfile)
+        .Include(ur => ur.User)
+            .ThenInclude(u => u.UserEmail)
+        .Where(ur => ur.Role.Name == roleName)
+        .Select(ur => ur.User)
+        .ToListAsync();
+}
 }

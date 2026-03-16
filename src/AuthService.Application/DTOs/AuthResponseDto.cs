@@ -1,6 +1,6 @@
 namespace AuthService.Application.DTOs;
 
-public class AuthResponseDtos
+public class AuthResponseDto
 {
     public bool Success { get; set; } = true;
     public string Message { get; set; } = string.Empty;

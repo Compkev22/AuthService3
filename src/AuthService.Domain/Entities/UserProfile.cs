@@ -17,6 +17,8 @@ public class UserProfile
     public string? ProfilePictureUrl { get; set; }
     public string? Bio { get; set; }
 
+    public string? Phone { get; set; }
+
     public DateTime DateOfBirth { get; set; }
 
     public User User { get; set; } = null!;

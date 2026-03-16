@@ -13,4 +13,7 @@ public class ResetPasswordDto
     [Required(ErrorMessage = "La nueva contraseña es obligatoria")]
     [MinLength(8, ErrorMessage = "La nueva contraseña debe tener al menos 8 caracteres")]
     public string NewPassword { get; set; } = string.Empty;
+
+    public string Token { get; set; } = string.Empty;
+
 }
