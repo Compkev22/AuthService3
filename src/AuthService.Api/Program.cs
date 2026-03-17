@@ -6,6 +6,7 @@ using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 using Serilog;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,37 @@ builder.Services.AddSecurityOptions();
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    // Nombre y versión de tu API en Swagger
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthService API", Version = "v1" });
+
+    // 1. Definir el esquema de seguridad (El candado)
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Autenticación JWT. Ingresa la palabra 'Bearer' seguida de un espacio y tu token.\n\nEjemplo: 'Bearer eyJhbGci...'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    // 2. Aplicar el requisito de seguridad globalmente
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 // .....................................................
 
 
@@ -187,8 +218,4 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
-// Registro interno para el record de clima usado arriba
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+

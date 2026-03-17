@@ -385,14 +385,14 @@ public class AuthService(
 
     public async Task<EmailResponseDto> ResetPasswordAsync(ResetPasswordDto resetPasswordDto)
     {
-        var user = await userRepository.GetByPasswordResetTokenAsync(resetPasswordDto.Token);
+        var user = await userRepository.GetByPasswordResetTokenAsync(resetPasswordDto.ResetToken);
         if (user == null || user.UserPasswordReset == null)
         {
             return new EmailResponseDto
             {
                 Success = false,
                 Message = "Token de reset inválido o expirado",
-                Data = new { token = resetPasswordDto.Token, reset = false }
+                Data = new { token = resetPasswordDto.ResetToken, reset = false }
             };
         }
 
